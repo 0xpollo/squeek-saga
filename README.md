@@ -148,7 +148,7 @@ Requires Python 3.12.
 python3.12 -m venv .venv
 .venv/bin/pip install -e ".[dev]"
 cp .env.example .env        # optional for a first look: every value has a default
-.venv/bin/pytest            # 152 tests, no network needed
+.venv/bin/pytest            # 166 tests, no network needed
 set -a; . ./.env; set +a
 .venv/bin/python -m squeek_saga
 ```

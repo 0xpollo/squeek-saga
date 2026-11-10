@@ -242,3 +242,10 @@ def test_only_real_discord_invites_are_accepted():
     for bad in ("", "http://discord.gg/abc123", "https://evil.example/discord.gg/abc", "javascript:alert(1)",
                 "https://discord.gg/abc123?x=<script>", "https://discord.gg.evil.example/abc"):
         assert demo_invite(bad) == ""
+
+
+def test_home_explains_how_to_play_without_joining_discord(site):
+    page = site().get("/").text
+    for command in ("/join", "/prep", "/raid", "/me", "/leaderboard", "/wheel", "/setup"):
+        assert f"<code>{command}</code>" in page
+    assert "No wallet, no sign-up, nothing to pay" in page
