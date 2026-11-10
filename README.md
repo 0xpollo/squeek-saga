@@ -148,7 +148,7 @@ Requires Python 3.12.
 python3.12 -m venv .venv
 .venv/bin/pip install -e ".[dev]"
 cp .env.example .env        # optional for a first look: every value has a default
-.venv/bin/pytest            # 149 tests, no network needed
+.venv/bin/pytest            # 152 tests, no network needed
 set -a; . ./.env; set +a
 .venv/bin/python -m squeek_saga
 ```
@@ -161,6 +161,10 @@ To create the Discord application: <https://discord.com/developers/applications>
 copy the token into `DISCORD_TOKEN`; copy the Application ID into `DISCORD_CLIENT_ID`. No privileged intents are
 needed. Invite permissions: View Channel, Send Messages, Embed Links, plus the `applications.commands` scope
 (the website's button builds this link).
+
+**Demo server (optional).** To let anyone try the game without adding the bot to their own server, create a
+Discord server, add the bot, run `/setup` on a channel, create an invite that never expires, and put it in
+`DISCORD_DEMO_INVITE`. The site then shows a "Play now in the demo server" button.
 
 ### Tests
 

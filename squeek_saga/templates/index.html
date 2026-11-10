@@ -9,8 +9,9 @@
     Your server votes on what the hero does. He is never asked to run. When he sleeps, the story dreams.
   </p>
   <div class="cta">
-    {% if invite_url %}<a class="button" href="{{ invite_url }}" rel="noopener">Add Squeek Saga to Discord</a>
-    {% else %}<span class="button disabled" title="DISCORD_CLIENT_ID is not configured">Add to Discord (not configured)</span>{% endif %}
+    {% if demo_invite_url %}<a class="button" href="{{ demo_invite_url }}" rel="noopener">Play now in the demo server</a>{% endif %}
+    {% if invite_url %}<a class="button{{ ' ghost' if demo_invite_url else '' }}" href="{{ invite_url }}" rel="noopener">Add Squeek Saga to your server</a>
+    {% elif not demo_invite_url %}<span class="button disabled" title="DISCORD_CLIENT_ID is not configured">Add to Discord (coming soon)</span>{% endif %}
     <a class="button ghost" href="/saga">Read the chronicle</a>
   </div>
   <dl class="stats">

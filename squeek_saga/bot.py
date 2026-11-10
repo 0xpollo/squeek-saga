@@ -395,6 +395,8 @@ def register_commands(bot: SagaBot) -> None:
         )
         embed.add_field(name="Commands", value="`/join` `/me` `/story` `/prep` `/raid` `/leaderboard` `/wheel` `/setup`", inline=False)
         embed.add_field(name="SqueekCore", value=f"[{d.core_address}]({d.address_url(d.core_address)})", inline=False)
+        if engine.settings.demo_invite_url:
+            embed.add_field(name="Demo server", value=engine.settings.demo_invite_url, inline=False)
         embed.add_field(
             name="Good to know",
             value="Testnet only: nothing here has monetary value. The bot never asks for a wallet or a key and signs nothing.",

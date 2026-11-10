@@ -220,3 +220,25 @@ def test_other_pages_render(site):
         assert client.get(path).status_code == 200
     assert client.get("/leaderboard/999").status_code == 404
     assert "default-src 'self'" in client.get("/").headers["content-security-policy"]
+
+
+def test_demo_server_button_appears_only_when_configured(site):
+    assert "Play now in the demo server" not in site().get("/").text
+    page = site(demo_invite_url="https://discord.gg/abc123").get("/").text
+    assert 'href="https://discord.gg/abc123"' in page and "Play now in the demo server" in page
+    assert "Add Squeek Saga to your server" in page  # the bot invite stays available
+
+
+def test_missing_bot_link_reads_as_coming_soon_not_broken(site):
+    page = site(discord_client_id="").get("/").text
+    assert "coming soon" in page and "not configured)" not in page
+
+
+def test_only_real_discord_invites_are_accepted():
+    from squeek_saga.config import demo_invite
+
+    assert demo_invite("https://discord.gg/abc123") == "https://discord.gg/abc123"
+    assert demo_invite("https://discord.com/invite/Squeek-Saga") == "https://discord.com/invite/Squeek-Saga"
+    for bad in ("", "http://discord.gg/abc123", "https://evil.example/discord.gg/abc", "javascript:alert(1)",
+                "https://discord.gg/abc123?x=<script>", "https://discord.gg.evil.example/abc"):
+        assert demo_invite(bad) == ""

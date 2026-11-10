@@ -99,6 +99,7 @@ def create_app(engine: SagaEngine, api: SqueekApi) -> FastAPI:
             "request": request,
             "site_url": settings.site_url,
             "invite_url": settings.invite_url,
+            "demo_invite_url": settings.demo_invite_url,
             "deployment": deployment,
             "core_url": deployment.address_url(deployment.core_address),
             "status": engine.status.as_dict(),

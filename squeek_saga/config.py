@@ -6,6 +6,7 @@ No private key is ever read here: the bot only reads the chain and signs nothing
 from __future__ import annotations
 
 import os
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -40,6 +41,7 @@ class Settings:
     # Discord.
     discord_token: str
     discord_client_id: str
+    demo_invite_url: str
 
     # Story.
     saga_model: str
@@ -73,6 +75,14 @@ class Settings:
         )
 
 
+_DISCORD_INVITE = re.compile(r"^https://(discord\.gg|discord\.com/invite)/[A-Za-z0-9-]{2,32}$")
+
+
+def demo_invite(raw: str) -> str:
+    """Only a plain Discord invite link is accepted; anything else is ignored."""
+    return raw if _DISCORD_INVITE.match(raw) else ""
+
+
 def load_settings() -> Settings:
     return Settings(
         rpc_url=_str("RPC_URL", "https://ethereum-sepolia-rpc.publicnode.com"),
@@ -83,6 +93,7 @@ def load_settings() -> Settings:
         data_dir=Path(_str("DATA_DIR", "./data")),
         discord_token=_str("DISCORD_TOKEN"),
         discord_client_id=_str("DISCORD_CLIENT_ID"),
+        demo_invite_url=demo_invite(_str("DISCORD_DEMO_INVITE")),
         saga_model=_str("SAGA_MODEL", "claude-opus-5-5"),
         anthropic_configured=bool(_str("ANTHROPIC_API_KEY") or _str("ANTHROPIC_AUTH_TOKEN")),
         sprint_work_per_hour=_int("SPRINT_WORK_PER_HOUR", 1400),

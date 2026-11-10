@@ -264,6 +264,7 @@ def make_settings(tmp_path: Path, **overrides) -> Settings:
         data_dir=tmp_path,
         discord_token="",
         discord_client_id="123",
+        demo_invite_url="",
         saga_model="test-model",
         anthropic_configured=False,
         sprint_work_per_hour=1400,
