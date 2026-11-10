@@ -285,6 +285,14 @@ class Store:
     def player_count(self) -> int:
         return self.one("SELECT COUNT(*) AS n FROM players")["n"]
 
+    def delete_player(self, user_id: str) -> bool:
+        """Erase a player's character, votes, preparations, memories and glory. Returns whether they existed."""
+        existed = self.get_player(user_id) is not None
+        with self.conn:
+            for table in ("votes", "preps", "deeds", "raid_glory", "players"):
+                self.conn.execute(f"DELETE FROM {table} WHERE user_id = ?", (user_id,))
+        return existed
+
     def add_deed(self, user_id: str, kind: str, text: str, chapter_id: int | None = None) -> None:
         self.run(
             "INSERT INTO deeds (user_id, chapter_id, kind, text, created_at) VALUES (?, ?, ?, ?, ?)",

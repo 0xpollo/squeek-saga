@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Privacy · Squeek Saga{% endblock %}
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Privacy</p>
+  <h1>What Squeek Saga stores about you</h1>
+  <p class="lede">Short version: your Discord ID, a cleaned-up display name, and what you do in the game. No messages, no wallet, no email. You can erase it yourself at any time with <code>/forget</code>.</p>
+</section>
+
+<article class="panel legal">
+  <h2>What is stored</h2>
+  <ul>
+    <li><strong>Your character:</strong> your Discord user ID, a display name reduced to plain letters and digits, the role you picked, and the server you joined from.</li>
+    <li><strong>What you do in the game:</strong> your votes, your daily preparations, your glory, and short notes about your character's appearances in chapters.</li>
+    <li><strong>Servers:</strong> the ID and name of each server the bot is in, and the channel chosen with <code>/setup</code>.</li>
+  </ul>
+
+  <h2>What is not collected</h2>
+  <ul>
+    <li>The bot does not read or store messages. It only receives the slash commands and button presses sent to it.</li>
+    <li>No wallet address, private key, email address, IP address or payment detail is asked for or stored by the game.</li>
+    <li>The website uses no cookies, no analytics and no advertising.</li>
+  </ul>
+
+  <h2>What is public</h2>
+  <p>The rankings on this site show character display names, roles, glory, and server names. Chapters may name the characters who took part. If you do not want your display name shown, change your server nickname before playing, or do not join.</p>
+
+  <h2>Who else receives data</h2>
+  <ul>
+    <li><strong>Anthropic:</strong> each chapter is written by Claude ({{ model }}). The request contains the story so far and, for up to four featured players, their character display name, role and in-game notes. It never contains Discord IDs.</li>
+    <li><strong>Discord:</strong> the game runs inside Discord, under Discord's own terms and privacy policy.</li>
+  </ul>
+  <p>Data is kept on a server run by the project maintainer and is not sold or shared with anyone else.</p>
+
+  <h2>How long, and how to erase it</h2>
+  <p>Data is kept while the game runs. Run <code>/forget confirm:True</code> in Discord to erase your character, votes, preparations, notes and glory immediately. Chapters that were already published are not rewritten, so a display name that appeared in one stays in that chapter's text.</p>
+
+  <h2>Contact</h2>
+  <p>Questions or requests: open an issue on the <a href="{{ repo_url }}/issues" rel="noopener">project's GitHub repository</a>.</p>
+</article>
+{% endblock %}

@@ -306,6 +306,10 @@ class SagaEngine:
             self.store.update_player(user_id, **changes)
         return self.store.get_player(user_id)
 
+    def forget(self, user_id: str) -> bool:
+        """Delete everything stored about a player. Published chapters are not rewritten."""
+        return self.store.delete_player(user_id)
+
     def prepare(self, user_id: str, action: str) -> dict[str, Any]:
         """Daily raid preparation. One per UTC day; it covers the next 24 hours of rounds."""
         if action not in PREP_ACTIONS:

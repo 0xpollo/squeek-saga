@@ -378,6 +378,23 @@ def register_commands(bot: SagaBot) -> None:
             ephemeral=True,
         )
 
+    @tree.command(name="forget", description="Delete your character and everything the saga stores about you.")
+    @app_commands.describe(confirm="Set to True to confirm. This cannot be undone.")
+    async def forget(interaction: discord.Interaction, confirm: bool = False) -> None:
+        if not confirm:
+            await interaction.response.send_message(
+                "Nothing was deleted. Run `/forget confirm:True` to erase your character, votes, preparations, "
+                "memories and glory. Chapters already published are not rewritten.",
+                ephemeral=True,
+            )
+            return
+        existed = engine.forget(str(interaction.user.id))
+        await interaction.response.send_message(
+            "Done: your character, votes, preparations, memories and glory are erased."
+            if existed else "There was nothing stored about you.",
+            ephemeral=True,
+        )
+
     @tree.command(name="about", description="What Squeek Saga is and how it uses Squeekchain.")
     async def about(interaction: discord.Interaction) -> None:
         d = engine.deployment
@@ -393,7 +410,17 @@ def register_commands(bot: SagaBot) -> None:
             colour=0x7A9E7E,
             url=engine.settings.site_url,
         )
-        embed.add_field(name="Commands", value="`/join` `/me` `/story` `/prep` `/raid` `/leaderboard` `/wheel` `/setup`", inline=False)
+        embed.add_field(
+            name="Commands",
+            value="`/join` `/me` `/story` `/prep` `/raid` `/leaderboard` `/wheel` `/setup` `/forget`",
+            inline=False,
+        )
+        embed.add_field(
+            name="Your data",
+            value=f"[Privacy]({engine.settings.site_url}/privacy) · [Terms]({engine.settings.site_url}/terms) · "
+                  "`/forget` erases what is stored about you.",
+            inline=False,
+        )
         embed.add_field(name="SqueekCore", value=f"[{d.core_address}]({d.address_url(d.core_address)})", inline=False)
         if engine.settings.demo_invite_url:
             embed.add_field(name="Demo server", value=engine.settings.demo_invite_url, inline=False)

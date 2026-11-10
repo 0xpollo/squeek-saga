@@ -24,6 +24,7 @@ from .story import PREMISE
 
 HERE = Path(__file__).parent
 PAGE_SIZE = 24
+REPO_URL = "https://github.com/0xpollo/squeek-saga"
 BRANCH_LABEL = {
     "slept": ("Slept", "The Dreamtide was in"),
     "trotted": ("Trotted", "An ordinary waking hour"),
@@ -102,6 +103,7 @@ def create_app(engine: SagaEngine, api: SqueekApi) -> FastAPI:
             "demo_invite_url": settings.demo_invite_url,
             "deployment": deployment,
             "core_url": deployment.address_url(deployment.core_address),
+            "repo_url": REPO_URL,
             "status": engine.status.as_dict(),
             "status_message": engine.status.message,
             "version": __version__,
@@ -228,6 +230,14 @@ def create_app(engine: SagaEngine, api: SqueekApi) -> FastAPI:
             },
             headers={"Cache-Control": "public, max-age=5"},
         )
+
+    @app.get("/privacy", response_class=HTMLResponse)
+    async def privacy(request: Request):
+        return templates.TemplateResponse(request, "privacy.html", context(request, model=settings.saga_model))
+
+    @app.get("/terms", response_class=HTMLResponse)
+    async def terms(request: Request):
+        return templates.TemplateResponse(request, "terms.html", context(request))
 
     @app.get("/healthz", response_class=PlainTextResponse)
     async def healthz():

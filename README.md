@@ -43,6 +43,7 @@ Add the bot from the website's **Add to Discord** button, then:
 | `/raid` | This week's boss, damage so far, and how many rounds are still unknown |
 | `/leaderboard scope:…` | Glory ranking for this server, or servers ranked globally |
 | `/wheel` | What the chain has certified, and when the next chapter can land |
+| `/forget confirm:True` | Erase your character and everything stored about you |
 | `/about` | What this is, with the disclaimers |
 
 Voting needs no command: press a button under a chapter. One vote per player per chapter; you can change it until
@@ -148,7 +149,7 @@ Requires Python 3.12.
 python3.12 -m venv .venv
 .venv/bin/pip install -e ".[dev]"
 cp .env.example .env        # optional for a first look: every value has a default
-.venv/bin/pytest            # 166 tests, no network needed
+.venv/bin/pytest            # 169 tests, no network needed
 set -a; . ./.env; set +a
 .venv/bin/python -m squeek_saga
 ```

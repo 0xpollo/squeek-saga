@@ -45,7 +45,7 @@ def make_bot(world):
 async def test_all_slash_commands_are_registered(world):
     bot = make_bot(world)
     names = {command.name for command in bot.tree.get_commands()}
-    assert names == {"join", "me", "story", "prep", "raid", "leaderboard", "wheel", "setup", "about"}
+    assert names == {"join", "me", "story", "prep", "raid", "leaderboard", "wheel", "setup", "about", "forget"}
     assert bot.intents.message_content is False  # no privileged intents needed
     await bot.close()
 
@@ -365,3 +365,29 @@ async def test_longest_allowed_chapter_still_fits_discord_limits(world):
     chapter["options"] = json.dumps([{"label": "L" * 40, "detail": "D" * 160}] * 3)
     chapter["vote_result"] = json.dumps({"winner": 0, "counts": [9999, 0, 0], "decidedBy": "votes", "label": "L" * 40})
     assert_discord_limits(chapter_embed(world.engine, chapter), chapter_view(world.engine, chapter, votable=True))
+
+
+async def test_forget_needs_confirmation_then_erases_everything(world):
+    bot = make_bot(world)
+    store = world.store
+    chapter = await first_chapter(world)
+    await run(bot, "join", slash(bot, world.engine), choice("seedblade"))
+    await run(bot, "prep", slash(bot, world.engine), choice("mend"))
+    world.engine.vote("1", "10", chapter["id"], 0)
+    store.replace_week_glory(0, {"1": 50})
+
+    content, kwargs = sent(await run(bot, "forget", slash(bot, world.engine)))
+    assert "Nothing was deleted" in content and kwargs["ephemeral"] is True
+    assert store.get_player("1") is not None
+
+    content, kwargs = sent(await run(bot, "forget", slash(bot, world.engine), True))
+    assert "erased" in content and kwargs["ephemeral"] is True
+    assert store.get_player("1") is None
+    for table in ("votes", "preps", "deeds", "raid_glory"):
+        assert store.one(f"SELECT COUNT(*) AS n FROM {table} WHERE user_id = ?", ("1",))["n"] == 0
+    assert store.vote_counts(chapter["id"], 3) == [0, 0, 0]
+    assert store.get_chapter(chapter["id"]) is not None  # the published story is untouched
+
+    content, _ = sent(await run(bot, "forget", slash(bot, world.engine), True))
+    assert "nothing stored" in content
+    await bot.close()

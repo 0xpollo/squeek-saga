@@ -180,3 +180,9 @@ nav a.button, nav a.button:hover { color: var(--moss-ink); text-decoration: none
 .commands div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 0.8rem; padding: 0.6rem 0; border-top: 1px solid var(--rule); }
 .commands dt { font-weight: 650; }
 .commands dd { margin: 0; font-size: 0.94rem; color: var(--ink-soft); }
+
+.legal { max-width: 46rem; }
+.legal h2 { margin-top: 1.4rem; }
+.legal h2:first-child { margin-top: 0; }
+.legal ul { padding-left: 1.2rem; margin: 0 0 0.9rem; }
+.legal li { margin-bottom: 0.45rem; }

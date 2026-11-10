@@ -249,3 +249,24 @@ def test_home_explains_how_to_play_without_joining_discord(site):
     for command in ("/join", "/prep", "/raid", "/me", "/leaderboard", "/wheel", "/setup"):
         assert f"<code>{command}</code>" in page
     assert "No wallet, no sign-up, nothing to pay" in page
+
+
+def test_privacy_and_terms_pages_state_what_is_true(site):
+    client = site()
+    privacy = client.get("/privacy")
+    assert privacy.status_code == 200
+    for fact in ("does not read or store messages", "No wallet address", "/forget confirm:True", "Anthropic",
+                 "no cookies"):
+        assert fact in privacy.text
+    terms = client.get("/terms")
+    assert terms.status_code == 200
+    for fact in ("not affiliated with", "Testnet only", "has any monetary value", "never asks for a wallet"):
+        assert fact in terms.text
+    home = client.get("/").text
+    assert 'href="/privacy"' in home and 'href="/terms"' in home
+
+
+def test_the_site_really_sets_no_cookies(site):
+    client = site()
+    for path in ("/", "/saga", "/raid", "/leaderboard", "/privacy", "/api/state"):
+        assert "set-cookie" not in client.get(path).headers
