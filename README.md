@@ -25,11 +25,7 @@ Squeektoshi is never pushed to run. Sleep moves the story too, and a boss that i
 >
 > **Unofficial community project.** Not affiliated with, endorsed by, or operated by Squeekchain.
 
-<!-- ============================================================================
-     SQUEEKCHAIN GENESIS VERIFICATION (README line)
-     Replace the placeholder on the next line with the exact line Squeekchain gives you.
-     ============================================================================ -->
-Genesis verification: `PASTE-THE-VERIFICATION-LINE-FROM-SQUEEKCHAIN-HERE`
+squeekchain-project: 9eb83323-3d1e-45c7-9448-d92bab69687e
 
 ---
 
@@ -198,18 +194,13 @@ volume (SQLite).
 
 ## Squeekchain Genesis verification
 
-Three places hold the values Squeekchain provides:
+This project is submitted to the Squeekchain Genesis Code lane by direct submission. Three proofs tie it to its builder:
 
-1. **Home page `<head>` tag.** Set `GENESIS_META_NAME` and `GENESIS_META_CONTENT` in `.env` and restart. The tag is
-   rendered on the home page only. If the tag you are given has another shape, paste it at the marked line in
-   `squeek_saga/templates/base.html`.
-2. **README line.** Replace the `Genesis verification:` line near the top of this file.
-3. **DNS record.**
-
-   <!-- GENESIS DNS RECORD: fill in the record Squeekchain asks for, on the site's (sub)domain. -->
-   | Type | Name | Value |
-   |---|---|---|
-   | `TXT` | `TO-FILL` | `TO-FILL` |
+1. **Home page tag.** `<meta name="squeekchain-project" content="9eb83323-3d1e-45c7-9448-d92bab69687e">` is rendered in the `<head>` of
+   <https://squeeksaga.xyz/>, from `GENESIS_META_NAME` and `GENESIS_META_CONTENT` in `.env`.
+2. **Repository line.** The `squeekchain-project:` line near the top of this file.
+3. **DNS record.** A `TXT` record named `_squeekchain` on `squeeksaga.xyz`, holding the `squeekchain-verify=…` value
+   issued by Genesis. It is rechecked daily and must stay in place.
 
 ## Project layout
 
