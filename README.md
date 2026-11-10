@@ -2,6 +2,10 @@
 
 **One story, shared by every Discord server, moved forward by a real hamster.**
 
+**Live site:** <https://squeeksaga.xyz> · **Play now:** [demo Discord server](https://discord.gg/UVfWJTnhUN) · **Add the bot:** button on the site
+
+![The Squeek Saga home page: the latest chapter, what the chain has certified, and the weekly boss](docs/screenshots/home.png)
+
 Squeek Saga is a community game for [Squeekchain](https://docs.squeekchain.com). Squeektoshi, a real hamster,
 runs in a wheel; his work is grouped into 600-second rounds and settled on Ethereum Sepolia. Every hour,
 Squeek Saga reads what he really did **on chain** and writes the next chapter of a saga that all servers share:
@@ -28,6 +32,10 @@ Squeektoshi is never pushed to run. Sleep moves the story too, and a boss that i
 Genesis verification: `PASTE-THE-VERIFICATION-LINE-FROM-SQUEEKCHAIN-HERE`
 
 ---
+
+| A chapter, with its vote and its settlement transaction | The weekly boss, damaged only by settled work |
+|---|---|
+| ![A chapter page](docs/screenshots/chapter.png) | ![The weekly boss page](docs/screenshots/raid.png) |
 
 ## How to play
 
