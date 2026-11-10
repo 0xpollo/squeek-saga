@@ -171,7 +171,7 @@ storyteller guardrails and fallback, the website, and the Discord vote buttons.
 ## Deploy (Docker + Caddy)
 
 ```bash
-git clone https://github.com/<you>/squeek-saga.git && cd squeek-saga
+git clone https://github.com/0xpollo/squeek-saga.git && cd squeek-saga
 cp .env.example .env && nano .env       # SITE_DOMAIN, SITE_URL, DISCORD_*, ANTHROPIC_API_KEY, RPC_URL
 docker compose --profile proxy up -d --build
 docker compose logs -f saga
@@ -179,7 +179,9 @@ docker compose logs -f saga
 
 Point the subdomain's DNS `A` record at the VPS first; Caddy then obtains the certificate on its own. If a Caddy
 already runs on the host, start only the app (`docker compose up -d --build`) and add the block from
-`Caddyfile.host-example` to the host's Caddyfile. State lives in the `saga-data` volume (SQLite).
+`Caddyfile.host-example` to the host's Caddyfile. If the host's ports 80/443 belong to **nginx** instead, start
+only the app the same way and use `deploy/nginx.conf.example` with certbot. State lives in the `saga-data`
+volume (SQLite).
 
 ## Squeekchain Genesis verification
 

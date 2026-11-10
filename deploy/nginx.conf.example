@@ -1,0 +1,28 @@
+# Squeek Saga behind an nginx that already owns ports 80/443 on the host.
+#
+#   1. Start only the app:            docker compose up -d --build
+#      (it listens on 127.0.0.1:${HOST_PORT}, 8000 by default)
+#   2. Copy this file to              /etc/nginx/sites-available/saga.example.com
+#      replace saga.example.com and the port, then link it into sites-enabled/
+#   3. nginx -t && systemctl reload nginx
+#   4. Get the certificate:           certbot --nginx -d saga.example.com
+#      (certbot rewrites this file to add the 443 server and the redirect)
+
+server {
+    listen 80;
+    listen [::]:80;
+    server_name saga.example.com;
+
+    access_log /var/log/nginx/squeek-saga.access.log;
+    error_log  /var/log/nginx/squeek-saga.error.log;
+
+    location / {
+        proxy_pass http://127.0.0.1:8000;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 30s;
+    }
+}
