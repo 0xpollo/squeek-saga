@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Rankings · Squeek Saga{% endblock %}
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Rankings</p>
+  <h1>{% if guild %}{{ guild.name }}{% else %}Glory across all servers{% endif %}</h1>
+  <p class="lede">
+    Glory is earned when the hamster's settled work lands while you are prepared (<code>/prep</code>, once a day).
+    It is never taken from anyone else, and nothing a player does makes the hamster run.
+  </p>
+</section>
+
+<section class="columns two">
+  {% if not guild %}
+  <div class="panel">
+    <h2>Servers</h2>
+    {% if guilds %}
+    <ol class="ranks">
+      {% for g in guilds %}
+      <li><span><a href="/leaderboard/{{ g.guild_id }}">{{ g.name }}</a> <em>{{ g.heroes }} companion{{ '' if g.heroes == 1 else 's' }}</em></span><strong>{{ g.glory }}</strong></li>
+      {% endfor %}
+    </ol>
+    {% else %}<p class="fine">No server has earned glory yet.</p>{% endif %}
+  </div>
+  {% endif %}
+  <div class="panel">
+    <h2>Companions</h2>
+    {% if players %}
+    <ol class="ranks">{% for p in players %}<li><span>{{ p.name }} <em>the {{ p.role }}</em></span><strong>{{ p.glory }}</strong></li>{% endfor %}</ol>
+    {% else %}<p class="fine">Nobody on the board yet.</p>{% endif %}
+    {% if guild %}<p><a href="/leaderboard">← All servers</a></p>{% endif %}
+  </div>
+</section>
+{% endblock %}

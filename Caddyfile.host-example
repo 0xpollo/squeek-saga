@@ -1,0 +1,13 @@
+# If Caddy already runs on the VPS itself (not in Docker), add this block to its
+# Caddyfile (usually /etc/caddy/Caddyfile), replace the domain, then: sudo systemctl reload caddy
+
+saga.example.com {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	reverse_proxy 127.0.0.1:8000
+}

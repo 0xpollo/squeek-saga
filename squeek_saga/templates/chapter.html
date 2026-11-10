@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% import "_parts.html" as parts %}
+{% block title %}Chapter {{ chapter.number }}: {{ chapter.title }} · Squeek Saga{% endblock %}
+{% block content %}
+<article class="panel chapter single">
+  <p class="eyebrow">Chapter {{ chapter.number }} of {{ total }}</p>
+  <h1>{{ chapter.title }}</h1>
+  {{ parts.wheel_fact(chapter) }}
+  {% if chapter.led_here %}<p class="led">The company chose: <strong>{{ chapter.led_here.label }}</strong></p>{% endif %}
+  {% for p in chapter.paragraphs %}<p class="prose">{{ p }}</p>{% endfor %}
+  {{ parts.choice(chapter) }}
+  {{ parts.provenance(chapter) }}
+</article>
+<nav class="pager" aria-label="Chapters">
+  {% if chapter.number > 1 %}<a href="/chapter/{{ chapter.number - 1 }}">← Chapter {{ chapter.number - 1 }}</a>{% else %}<span></span>{% endif %}
+  <a href="/saga">All chapters</a>
+  {% if chapter.number < total %}<a href="/chapter/{{ chapter.number + 1 }}">Chapter {{ chapter.number + 1 }} →</a>{% else %}<span></span>{% endif %}
+</nav>
+{% endblock %}

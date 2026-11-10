@@ -1,0 +1,23 @@
+# secrets and local state
+.env
+data/
+data-dev/
+*.sqlite3
+*.sqlite3-*
+
+# python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+
+# agent tooling: the Squeekchain skill is proprietary documentation, install it yourself with
+#   npx skills add https://docs.squeekchain.com
+.claude/
+.agents/
+skills-lock.json
+
+.DS_Store

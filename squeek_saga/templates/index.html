@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% import "_parts.html" as parts %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">A shared saga for every Discord server</p>
+  <h1>A real hamster decides what happens next.</h1>
+  <p class="lede">
+    Every hour, the work Squeektoshi's wheel settled on Ethereum writes a new chapter: he slept, he trotted, or he sprinted.
+    Your server votes on what the hero does. He is never asked to run. When he sleeps, the story dreams.
+  </p>
+  <div class="cta">
+    {% if invite_url %}<a class="button" href="{{ invite_url }}" rel="noopener">Add Squeek Saga to Discord</a>
+    {% else %}<span class="button disabled" title="DISCORD_CLIENT_ID is not configured">Add to Discord (not configured)</span>{% endif %}
+    <a class="button ghost" href="/saga">Read the chronicle</a>
+  </div>
+  <dl class="stats">
+    <div><dt>Chapters</dt><dd data-chapter-count>{{ chapter_count }}</dd></div>
+    <div><dt>Servers</dt><dd>{{ guild_count }}</dd></div>
+    <div><dt>Companions</dt><dd>{{ player_count }}</dd></div>
+  </dl>
+</section>
+
+<div class="columns">
+  <article class="panel chapter">
+    {% if latest %}
+    <p class="eyebrow">Latest chapter · <a href="/chapter/{{ latest.number }}">Chapter {{ latest.number }}</a></p>
+    <h2>{{ latest.title }}</h2>
+    {{ parts.wheel_fact(latest) }}
+    {% for p in latest.paragraphs %}<p class="prose">{{ p }}</p>{% endfor %}
+    {{ parts.choice(latest) }}
+    {{ parts.provenance(latest) }}
+    {% else %}
+    <p class="eyebrow">Prologue</p>
+    <h2>Before the first chapter</h2>
+    <p class="prose">{{ premise }}</p>
+    <p class="hint">The first chapter is written as soon as SqueekCore has settled a full hour of rounds.</p>
+    {% endif %}
+  </article>
+
+  <aside class="side">
+    <section class="panel wheel" data-wheel>
+      <p class="eyebrow">The wheel</p>
+      <h2>What the chain knows</h2>
+      <p data-saga-settled>
+        {% if status.settledThroughRound %}Certified through round <strong>{{ status.settledThroughRound }}</strong>,
+        {{ status.cumulativeWork }} work units all time.{% else %}Not known yet.{% endif %}
+      </p>
+      <p class="fine" data-saga-message>{{ status_message }}</p>
+      <p class="fine" data-next-chapter {% if eta %}data-eta="{{ eta }}"{% endif %}></p>
+      <hr>
+      <p class="fine"><strong>Live, not settled</strong> (from the public Squeekchain API, for display only):</p>
+      <p class="fine" data-wheel-live>Checking…</p>
+    </section>
+    {{ parts.raid_panel(raid) }}
+  </aside>
+</div>
+
+<section class="how">
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><h3>The wheel settles</h3><p>Squeektoshi's wheel work is grouped into 600-second rounds and settled on SqueekCore, on Ethereum Sepolia.</p></li>
+    <li><h3>The hour is read</h3><p>Once six rounds in a row are certified, their settled work decides the chapter's mood: slept, trotted or sprinted.</p></li>
+    <li><h3>The company votes</h3><p>Between chapters, members vote with Discord buttons on what the hero does. A tie is broken by the wheel.</p></li>
+    <li><h3>The chapter is written</h3><p>The storyteller writes a short chapter that follows the vote, names the players who took part, and links to its settlement transaction.</p></li>
+  </ol>
+  <p class="fine">Rounds that SqueekCore has not settled yet are unknown, not zero. The saga waits for them.</p>
+</section>
+
+{% if earlier %}
+<section>
+  <h2>Earlier chapters</h2>
+  <ul class="chapter-list">
+    {% for c in earlier %}
+    <li class="branch-{{ c.branch }}">
+      <a href="/chapter/{{ c.number }}"><span class="num">{{ c.number }}</span> {{ c.title }}</a>
+      <span class="badge">{{ c.branch_label }}</span>
+    </li>
+    {% endfor %}
+  </ul>
+  <p><a href="/saga">All {{ chapter_count }} chapters →</a></p>
+</section>
+{% endif %}
+
+<section class="columns two">
+  <div class="panel">
+    <p class="eyebrow">Rankings</p>
+    <h2>Servers</h2>
+    {% if top_guilds %}
+    <ol class="ranks">{% for g in top_guilds %}<li><span>{{ g.name }}</span><strong>{{ g.glory }}</strong></li>{% endfor %}</ol>
+    {% else %}<p class="fine">No glory yet. It is earned when the hamster's work lands while players are prepared.</p>{% endif %}
+  </div>
+  <div class="panel">
+    <p class="eyebrow">Rankings</p>
+    <h2>Companions</h2>
+    {% if top_players %}
+    <ol class="ranks">{% for p in top_players %}<li><span>{{ p.name }} <em>the {{ p.role }}</em></span><strong>{{ p.glory }}</strong></li>{% endfor %}</ol>
+    {% else %}<p class="fine">Nobody on the board yet.</p>{% endif %}
+    <p><a href="/leaderboard">Full rankings →</a></p>
+  </div>
+</section>
+{% endblock %}

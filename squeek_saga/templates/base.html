@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Squeek Saga{% endblock %}</title>
+  <meta name="description" content="{% block description %}A shared Discord saga moved forward by Squeektoshi, the Squeekchain hamster. Each hour his settled work on SqueekCore decides the next chapter.{% endblock %}">
+  <meta property="og:title" content="Squeek Saga">
+  <meta property="og:description" content="One story, every server, one real hamster. Unofficial community project on Sepolia testnet.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ site_url }}{{ request.url.path }}">
+  {% if home %}
+  {# ---- SQUEEKCHAIN GENESIS VERIFICATION TAG (home page <head> only) ----
+     Set GENESIS_META_NAME and GENESIS_META_CONTENT in .env with the values
+     Squeekchain gives you. If their tag has another shape, paste it on the
+     line below instead. #}
+  {% if genesis_meta_name and genesis_meta_content %}<meta name="{{ genesis_meta_name }}" content="{{ genesis_meta_content }}">{% else %}<!-- genesis-verification: not set -->{% endif %}
+  {% endif %}
+  <link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="notice" role="note">
+    <strong>Testnet only.</strong> Unofficial community project, not affiliated with or endorsed by Squeekchain. Nothing here has monetary value.
+  </div>
+  <header class="masthead">
+    <a class="brand" href="/"><img src="/static/icon.svg" alt="" width="30" height="30"><span>Squeek Saga</span></a>
+    <nav aria-label="Main">
+      <a href="/saga">The chronicle</a>
+      <a href="/raid">Weekly boss</a>
+      <a href="/leaderboard">Rankings</a>
+      {% if invite_url %}<a class="button small" href="{{ invite_url }}" rel="noopener">Add to Discord</a>{% endif %}
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="colophon">
+    <p>
+      Squeek Saga reads <a href="{{ core_url }}" rel="noopener">SqueekCore</a> on Ethereum Sepolia
+      (chain ID {{ deployment.chain_id }}, release {{ deployment.release }}). It never asks for a wallet or a key and signs nothing.
+    </p>
+    <p>
+      <strong>Sepolia testnet only.</strong> Unofficial community project built for Squeekchain Genesis. Not affiliated with Squeekchain.
+      Squeektoshi is never asked to run: when he sleeps, the story goes on.
+    </p>
+  </footer>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "_parts.html" as parts %}
+{% block title %}The chronicle · Squeek Saga{% endblock %}
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">The chronicle</p>
+  <h1>The saga so far</h1>
+  <p class="lede">{{ total }} chapter{{ '' if total == 1 else 's' }}, each one triggered by a settlement on SqueekCore.</p>
+</section>
+
+{% if page == 1 %}
+<article class="panel chapter prologue">
+  <p class="eyebrow">Prologue</p>
+  <p class="prose">{{ premise }}</p>
+</article>
+{% endif %}
+
+{% for c in chapters %}
+<article class="panel chapter" id="chapter-{{ c.number }}">
+  <p class="eyebrow"><a href="/chapter/{{ c.number }}">Chapter {{ c.number }}</a></p>
+  <h2>{{ c.title }}</h2>
+  {{ parts.wheel_fact(c) }}
+  {% if c.led_here %}<p class="led">The company chose: <strong>{{ c.led_here.label }}</strong></p>{% endif %}
+  {% for p in c.paragraphs %}<p class="prose">{{ p }}</p>{% endfor %}
+  {{ parts.choice(c) }}
+  {{ parts.provenance(c) }}
+</article>
+{% else %}
+<p class="hint">No chapters yet. The first is written as soon as SqueekCore has settled a full hour of rounds.</p>
+{% endfor %}
+
+{% if pages > 1 %}
+<nav class="pager" aria-label="Pages">
+  {% if page > 1 %}<a href="/saga?page={{ page - 1 }}">← Earlier</a>{% else %}<span></span>{% endif %}
+  <span>Page {{ page }} of {{ pages }}</span>
+  {% if page < pages %}<a href="/saga?page={{ page + 1 }}">Later →</a>{% else %}<span></span>{% endif %}
+</nav>
+{% endif %}
+{% endblock %}

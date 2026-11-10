@@ -1,0 +1,13 @@
+# Used by the bundled `caddy` service (docker compose --profile proxy).
+# SITE_DOMAIN comes from .env, e.g. saga.example.com. Caddy obtains the TLS certificate itself.
+
+{$SITE_DOMAIN} {
+	encode zstd gzip
+
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		-Server
+	}
+
+	reverse_proxy saga:8000
+}

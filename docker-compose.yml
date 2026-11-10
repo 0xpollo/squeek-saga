@@ -1,0 +1,44 @@
+# Squeek Saga: one container runs the saga worker, the Discord bot and the website.
+#
+#   With the bundled Caddy (ports 80/443 free on the VPS):
+#     docker compose --profile proxy up -d --build
+#
+#   Behind a Caddy that already runs on the host:
+#     docker compose up -d --build
+#     ...then add the block from Caddyfile.host-example to the host's Caddyfile.
+
+services:
+  saga:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DATA_DIR: /data
+      PORT: "8000"
+    volumes:
+      - saga-data:/data
+    ports:
+      # Local only: the public entry point is Caddy.
+      - "127.0.0.1:${HOST_PORT:-8000}:8000"
+
+  caddy:
+    profiles: ["proxy"]
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - saga
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?set SITE_DOMAIN in .env}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+
+volumes:
+  saga-data:
+  caddy-data:
+  caddy-config:

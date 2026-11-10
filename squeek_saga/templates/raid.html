@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% import "_parts.html" as parts %}
+{% block title %}Weekly boss · Squeek Saga{% endblock %}
+{% block content %}
+<section class="page-head">
+  <p class="eyebrow">Weekly boss</p>
+  <h1>Worn down by a hamster, one round at a time</h1>
+  <p class="lede">
+    Each week a boss arrives with hit points set from the hamster's own recent work. Players prepare every day,
+    but only work that SqueekCore has settled deals damage. If the week ends first, the boss simply wanders off.
+  </p>
+</section>
+
+{{ parts.raid_panel(raid) }}
+
+<section class="columns two">
+  <div class="panel">
+    <p class="eyebrow">This week</p>
+    <h2>Servers</h2>
+    {% if week_guilds %}
+    <ol class="ranks">{% for g in week_guilds %}<li><span>{{ g.name }}</span><strong>{{ g.glory }}</strong></li>{% endfor %}</ol>
+    {% else %}<p class="fine">No glory this week yet.</p>{% endif %}
+  </div>
+  <div class="panel">
+    <p class="eyebrow">This week</p>
+    <h2>Companions</h2>
+    {% if week_players %}
+    <ol class="ranks">{% for p in week_players %}<li><span>{{ p.name }} <em>the {{ p.role }}</em></span><strong>{{ p.glory }}</strong></li>{% endfor %}</ol>
+    {% else %}<p class="fine">Nobody was prepared when work landed yet.</p>{% endif %}
+  </div>
+</section>
+
+<section>
+  <h2>Past weeks</h2>
+  {% if history %}
+  <table class="table">
+    <thead><tr><th>Week</th><th>Boss</th><th>Outcome</th><th class="num">Settled work / strength</th></tr></thead>
+    <tbody>
+      {% for r in history %}
+      <tr>
+        <td>{{ r.week + 1 }}</td>
+        <td>{{ r.boss }}</td>
+        <td>{% if r.status == 'defeated' %}Worn down{% elif r.status == 'retreated' %}Wandered off{% else %}Still abroad{% endif %}</td>
+        <td class="num">{{ r.damage }} / {{ r.hp }} ({{ r.percent }}%)</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}<p class="fine">No raids recorded yet.</p>{% endif %}
+</section>
+{% endblock %}

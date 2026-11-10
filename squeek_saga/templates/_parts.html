@@ -1,0 +1,67 @@
+{% macro wheel_fact(c) %}
+<p class="wheel-fact branch-{{ c.branch }}">
+  <span class="badge">{{ c.branch_label }}</span>
+  <span>{{ c.branch_mood }}. {{ c.work }} work units settled over rounds {{ c.first_round }}–{{ c.last_round }}
+  ({{ c.active_rounds }} of {{ c.round_count }} rounds active).</span>
+</p>
+{% endmacro %}
+
+{% macro provenance(c) %}
+<p class="provenance">
+  Triggered by settlement
+  <a href="{{ c.tx_url }}" rel="noopener" title="{{ c.tx }}"><code>{{ c.tx[:10] }}…{{ c.tx[-8:] }}</code></a>
+  in Ethereum block {{ c.settlement_block }} · read at block {{ c.read_block }} · written {{ c.written }}
+  {% if c.source == 'fallback' %}· <span title="The storyteller was unavailable, so a pre-written chapter was used.">stock chapter</span>{% endif %}
+</p>
+{% endmacro %}
+
+{% macro choice(c) %}
+<section class="choice" {% if c.open %}data-open-vote="{{ c.number }}"{% endif %}>
+  <h3>{{ c.choice_prompt }}</h3>
+  <ol>
+    {% for o in c.options %}
+    <li class="{{ 'won' if o.won else '' }}">
+      <div class="option-head">
+        <strong>{{ o.label }}</strong>
+        <span class="votes"><span data-vote-count="{{ loop.index0 }}">{{ o.votes }}</span> vote{{ '' if o.votes == 1 else 's' }}{% if o.won %} · chosen{% endif %}</span>
+      </div>
+      <p>{{ o.detail }}</p>
+    </li>
+    {% endfor %}
+  </ol>
+  {% if c.open %}
+  <p class="hint">Voting is open in Discord until the next chapter. Use the buttons under the chapter, or <code>/story</code>.</p>
+  {% elif c.outcome %}
+  <p class="hint">
+    {% if c.outcome.decidedBy == 'votes' %}Decided by the readers' vote.
+    {% elif c.outcome.decidedBy == 'wheel_tiebreak' %}The vote was tied, so the wheel's settled work broke the tie.
+    {% else %}Nobody voted, so the wheel's settled work picked.{% endif %}
+  </p>
+  {% endif %}
+</section>
+{% endmacro %}
+
+{% macro raid_panel(raid) %}
+<section class="panel raid" data-raid>
+  {% if raid %}
+  <p class="eyebrow">Weekly boss · week {{ raid.week + 1 }}</p>
+  <h2 data-raid-name>{{ raid.bossName }}</h2>
+  <p>{{ raid.bossBlurb }}</p>
+  <progress class="meter" max="100" value="{{ raid.percent }}" data-raid-fill aria-label="Boss worn down">{{ raid.percent }}%</progress>
+  <p class="meter-legend">
+    <strong><span data-raid-damage>{{ raid.damage }}</span> / <span data-raid-hp>{{ raid.hp }}</span></strong> work units
+    · <span data-raid-status>{% if raid.status == 'defeated' %}worn down, it has slunk away{% elif raid.status == 'retreated' %}wandered off on its own{% else %}still abroad{% endif %}</span>
+  </p>
+  <p class="fine">
+    <span data-raid-certified>{{ raid.roundsCertified }}</span> of {{ raid.roundsTotal }} rounds certified on SqueekCore.
+    The other <span data-raid-unknown>{{ raid.roundsUnknown }}</span> are not settled yet: unknown, not zero.
+    Only the hamster's settled work deals damage. Players prepare with <code>/prep</code> to earn glory when it lands.
+  </p>
+  <p class="fine">Boss strength: {{ raid.hpBasis }}.</p>
+  {% else %}
+  <p class="eyebrow">Weekly boss</p>
+  <h2>Not known yet</h2>
+  <p>The chain state has not been read yet, so there is no boss to show.</p>
+  {% endif %}
+</section>
+{% endmacro %}

@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+.claude
+.agents
+data
+data-dev
+tests
+__pycache__
+*.pyc
+.pytest_cache
+*.egg-info
+build
+dist
